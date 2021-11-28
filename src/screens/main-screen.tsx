@@ -111,7 +111,7 @@ export default function MainScreen() {
     icon={<Icon size="sm" color="white" as={<AntDesign name="plus" />} />}
     colorScheme={useColorModeValue('blue', 'darkBlue')}
     bg={useColorModeValue('blue.500', 'blue.400')}
-   onPress={() => {
+    onPress={() => {
      const id = shortid.generate()
      setData([
        {
