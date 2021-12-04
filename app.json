@@ -3,6 +3,7 @@
     "name": "productive-app",
     "slug": "productive-app",
     "version": "1.0.0",
+    "privacy": "public",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -27,6 +28,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Small and simple productive app for handling daily tasks.",
+    "githubUrl": "https://github.com/Eezi/productive-app"
   }
 }

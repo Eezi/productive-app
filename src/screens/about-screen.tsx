@@ -20,7 +20,7 @@ const AboutScreen = () => {
     <ScrollView
       borderTopLeftRadius="20px"
       borderTopRightRadius="20px"
-      bg={useColorModeValue('warmGray.50', 'primary.900')}
+      bg={useColorModeValue('warmGray.50', '#1f223d')}
       mt="-20px"
       pt="30px"
       p={4}

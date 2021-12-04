@@ -2,7 +2,7 @@ import { extendTheme } from "native-base";
 
 const config = {
   useSystemColorMode: false,
-  initialColorMode: 'light'
+  initialColorMode: 'dark'
 }
 
 const colors = {

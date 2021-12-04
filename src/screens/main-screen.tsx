@@ -1,46 +1,76 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Center,
   VStack,
   useColorModeValue,
   Fab,
-  Icon
+  Icon,
 } from 'native-base'
 import AnimatedColorBox from '../components/animated-color-box'
 import { AntDesign } from '@expo/vector-icons'
-import AnimatedCheckbox from '../components/animated-checkbox'
-import TaskItem from '../components/task-item'
-import Masthead from '../components/masthead'
 import shortid from 'shortid'
 import TaskList from '../components/task-list'
 import NavBar from '../components/navbar'
-
-const initialData = [
-  {
-    id: shortid.generate(),
-    subject: 'Käy kaupassa',
-    done: false,
-  },
-  {
-    id: shortid.generate(),
-    subject: 'Venyttele 30min',
-    done: false,
-  },
-  {
-    id: shortid.generate(),
-    subject: 'Käy treenaamassa 2h',
-    done: false,
-  }
-]
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MainScreen() {
-  const [data, setData] = useState(initialData)
+  const [data, setData] = useState([])
   const [editingItemId, setIsEditingId] = useState<string | null>(null)
 
-  const [checked, setChecked] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
-  const [subject, setSubject] = useState('Task Item')
+  const storeData = async (task: any) => {
+  try {
+    const jsonValue = JSON.stringify(task)
+    await AsyncStorage.setItem(task.id, jsonValue)
+  } catch (e) {
+    console.log('AsyncStorage error [storeData]', e)
+  }
+}
+
+
+const getData = async () => {
+  let keys = []
+  try {
+    keys = await AsyncStorage.getAllKeys()
+    const tasks = await AsyncStorage.multiGet(keys);
+    return {
+      todos: tasks,
+      keys,
+    } 
+  } catch(e) {
+    console.log('AsyncStorage error [getData]', e)
+  }
+
+}
+
+const removeFromStorage = async (id: string) => {
+  try {
+    await AsyncStorage.removeItem(id)
+  } catch(e) {
+    console.log('AsyncStorage error [reomoveData]', e)
+  }
+}
+
+
+const editStorageTask = async (task: any) => {
+  try {
+    const jsonValue = JSON.stringify(task)
+    await AsyncStorage.setItem(task.id, jsonValue)
+  } catch(e) {
+    console.log('AsyncStorage error [editStorageTask]', e)
+  }
+}
+
+useEffect(async() => {
+  const tasks = await getData();
+  const { todos, keys } = tasks;
+    if (tasks !== null) {
+      const tasksData = keys.map((k, index) => {
+        return JSON.parse(todos[index][1])
+      })
+      setData(tasksData)
+    }
+}, [])
+
   const handleToggleTaskItem = useCallback((item) => {
     setData(prevData => {
       const newData = [...prevData]
@@ -51,6 +81,7 @@ export default function MainScreen() {
       }
       return newData
     })
+    editStorageTask({...item, done: !item.done })
   }, [])
 
   const handleChangeTaskItemSubject = useCallback((item, newSubject) => {
@@ -67,6 +98,7 @@ export default function MainScreen() {
 
   const handleFinishEditingTaskItem = useCallback((item) => {
     setIsEditingId(null)
+    editStorageTask(item)
   }, [])
 
   const handlePressTaskItemLabel = useCallback((item) => {
@@ -78,21 +110,37 @@ export default function MainScreen() {
       const newData = prevData.filter(i => i !== item)
       return newData
     })
+    removeFromStorage(item.id);
   }, [])
 
+  const handleCreateTask = () => {
+     const id = shortid.generate()
+     const newTask = {
+       id,
+       subject: '',
+       done: false
+    }
+    setData([
+     newTask,
+     ...data
+    ])
+    setIsEditingId(id)
+    storeData(newTask);
+  }
+
  return (
-  <AnimatedColorBox bg={useColorModeValue('warmGray.50', 'primary.900')} 
+  <AnimatedColorBox bg={useColorModeValue('warmGray.60', '#1f223d')} 
     w="full"
    flex={1}>
-   <Masthead title="What's up, Tomi!" image={require('../assets/tech-img.jpeg')}>
     <NavBar  />
-   </Masthead>
+   {/*<Masthead title="What's up, Tomi!" image={require('../assets/tech-img.jpeg')}>
+   </Masthead>*/}
    <VStack 
     space={1} 
     mt="-20px" 
     borderTopLeftRadius="20px" 
     borderTopRightRadius="20px" 
-    bg={useColorModeValue('warmGray.50', 'primary.900')}
+    bg={useColorModeValue('warmGray.50', '#1f223d')}
     pt="20px">
       <TaskList 
         data={data}
@@ -108,22 +156,11 @@ export default function MainScreen() {
     position="absolute" 
     renderInPortal={false} 
     size="sm" 
-    icon={<Icon size="sm" color="white" as={<AntDesign name="plus" />} />}
+    icon={<Icon size="sm" color="black" as={<AntDesign name="plus" />} />}
     colorScheme={useColorModeValue('blue', 'darkBlue')}
-    bg={useColorModeValue('blue.500', 'blue.400')}
-    onPress={() => {
-     const id = shortid.generate()
-     setData([
-       {
-         id,
-         subject: '',
-         done: false
-       },
-       ...data
-     ])
-     setIsEditingId(id)
-   }}
+    bg={useColorModeValue('blue.500', '#00fff1')}
+    onPress={handleCreateTask}
    />
-    </AnimatedColorBox>
+  </AnimatedColorBox>
   )
 }

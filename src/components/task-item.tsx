@@ -44,7 +44,7 @@ const TaskItem = (props: Props) => {
   const theme = useTheme()
   const highlightColor = themeTools.getColor(
     theme,
-    useColorModeValue('blue.500', 'blue.400')
+    useColorModeValue('blue.500', '#00fff1')
   )
   const boxStroke = themeTools.getColor(
     theme,
@@ -53,7 +53,7 @@ const TaskItem = (props: Props) => {
 
   const checkmarkColor = themeTools.getColor(
     theme,
-    useColorModeValue('white', 'white')
+    useColorModeValue('white', 'black')
   )
 
   const activeTextColor = themeTools.getColor(
@@ -83,7 +83,7 @@ const TaskItem = (props: Props) => {
          <Icon color="white" as={<Feather name="trash-2" />} size="sm" />
       </Box>
     }>
-    <HStack alignItems="center" w="full" px={4} py={2} bg={useColorModeValue('warmGray.50', 'primary.900')}>
+    <HStack alignItems="center" w="full" px={4} py={2} bg={useColorModeValue('warmGray.50', '#1f223d')}>
     <Box width={30} height={30} mr={3}>
       <Pressable onPress={onToggleCheckbox}>
         <AnimatedCheckbox
