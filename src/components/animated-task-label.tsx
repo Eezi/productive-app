@@ -29,7 +29,7 @@ const AnimatedTaskLabel = memo((props: Props) => {
   const hstackOffset = useSharedValue(0)
   const hstackAnimatedStyles = useAnimatedStyle(
     () => ({
-      transform: [{ translateX: hstackOffset.value }]
+      transform: [{ translateX: hstackOffset.value }],
     }),
     [strikethrough]
   )
@@ -81,7 +81,7 @@ const AnimatedTaskLabel = memo((props: Props) => {
       <AnimatedHStack alignItems="center" style={[hstackAnimatedStyles]}>
         <AnimatedText 
           fontSize={19} 
-          noOfLines={1} 
+          noOfLines={6} 
           isTruncated 
           px={1}
           style={[textColorAnimatedStyles]}

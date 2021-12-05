@@ -83,7 +83,13 @@ const TaskItem = (props: Props) => {
          <Icon color="white" as={<Feather name="trash-2" />} size="sm" />
       </Box>
     }>
-    <HStack alignItems="center" w="full" px={4} py={2} bg={useColorModeValue('warmGray.50', '#1f223d')}>
+    <HStack 
+      alignItems="center" 
+      w="full" 
+      px={6} 
+      py={2} 
+      bg={useColorModeValue('warmGray.50', '#1f223d')}
+      >
     <Box width={30} height={30} mr={3}>
       <Pressable onPress={onToggleCheckbox}>
         <AnimatedCheckbox
