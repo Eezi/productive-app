@@ -37,9 +37,9 @@ const TaskItem = (props: Props) => {
     onRemove,
     onPressLabel, 
     simultaneousHandlers,
-  onChangeSubject,
-  onFinishEditing,
-  isEditing,
+    onChangeSubject,
+    onFinishEditing,
+    isEditing,
   } = props
   const theme = useTheme()
   const highlightColor = themeTools.getColor(
@@ -68,7 +68,7 @@ const TaskItem = (props: Props) => {
   const handleChangeSubject = useCallback((e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     onChangeSubject && onChangeSubject(e.nativeEvent.text)
   }, [onChangeSubject])
-
+  
   return (
     <SwipableView simultaneousHandlers={simultaneousHandlers}
     onSwipeLeft={onRemove}

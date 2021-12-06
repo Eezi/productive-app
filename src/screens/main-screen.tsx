@@ -5,6 +5,7 @@ import {
   useColorModeValue,
   Fab,
   Icon,
+  View
 } from 'native-base'
 import AnimatedColorBox from '../components/animated-color-box'
 import { AntDesign } from '@expo/vector-icons'
@@ -12,6 +13,24 @@ import shortid from 'shortid'
 import TaskList from '../components/task-list'
 import NavBar from '../components/navbar'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const initialData = [
+  {
+    id: shortid.generate(),
+    subject: 'Swipe left to right from the task item to remove it.',
+    done: false,
+  },
+  {
+    id: shortid.generate(),
+    subject: 'Add the task by pressing the buttom from bottom right corner.',
+    done: false,
+  },
+  {
+    id: shortid.generate(),
+    subject: 'You can navigate in app by pressing the icon form top left corner.',
+    done: false,
+  }
+]
 
 export default function MainScreen() {
   const [data, setData] = useState([])
@@ -31,6 +50,9 @@ const getData = async () => {
   let keys = []
   try {
     keys = await AsyncStorage.getAllKeys()
+    if (keys.length <= 0) {
+      return setData(initialData)
+    }
     const tasks = await AsyncStorage.multiGet(keys);
     return {
       todos: tasks,
@@ -141,7 +163,8 @@ useEffect(async() => {
     borderTopLeftRadius="20px" 
     borderTopRightRadius="20px" 
     bg={useColorModeValue('warmGray.50', '#1f223d')}
-    pt="20px">
+    pt="5px"
+    >
       <TaskList 
         data={data}
         onToggleItem={handleToggleTaskItem}

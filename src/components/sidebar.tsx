@@ -48,21 +48,21 @@ const Sidebar = (props: DrawerContentComponentProps) => {
              />
         </HStack>
     <Heading mb={4} size="xl">
-      Tomi Salo
+      All tasks
     </Heading>
     <MenuButton 
       active={currentRoute === 'Main'} 
    I  onPress={handlePressMenuMain}
       icon="inbox"
    >
-      Tasks
+      Today
     </MenuButton>
     <MenuButton 
       active={currentRoute === 'About'} 
    I  onPress={handlePressMenuAbout}
-      icon="info"
+      icon="clock"
    >
-      About
+      Someday
     </MenuButton>
     </VStack>
     <Center>

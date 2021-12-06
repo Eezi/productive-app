@@ -125,6 +125,7 @@ export default function TaskList(props: TaskListProps) {
       />
     ))}
       </AnimatePresence>
+    <View style={{ height: 250 }} />
     </StyledScrollView>
   )
 }
