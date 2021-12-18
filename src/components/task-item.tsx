@@ -2,7 +2,8 @@ import React, { useCallback } from 'react'
 import {
   NativeSyntheticEvent,
   Pressable,
-  TextInputChangeEventData
+  TextInputChangeEventData,
+  StyleSheet
 } from 'react-native'
 import AnimatedCheckbox from './animated-checkbox'
 import { 
@@ -76,7 +77,6 @@ const TaskItem = (props: Props) => {
       <Box 
       w="full" 
       h="full" 
-      bg="red.500" 
       alignItems="flex-end" 
       justifyContent="center" 
       pr={4}>
@@ -85,9 +85,14 @@ const TaskItem = (props: Props) => {
     }>
     <HStack 
       alignItems="center" 
-      w="full" 
-      px={6} 
-      py={2} 
+      //w="full" 
+      pl={4} 
+      pr={8} 
+      mx={1}
+      py={4} 
+      mb={1}
+      style={styles.item}
+      //bg={useColorModeValue('warmGray.50', '#1f223d')}
       bg={useColorModeValue('warmGray.50', '#1f223d')}
       >
     <Box width={30} height={30} mr={3}>
@@ -106,7 +111,7 @@ const TaskItem = (props: Props) => {
       placeholder="Task" 
       value={subject} 
       variant="unstyled" 
-      fontSize={19}
+      fontSize={16}
       px={1}
       py={0}
       autoFocus
@@ -128,5 +133,11 @@ const TaskItem = (props: Props) => {
     </SwipableView>
   )
 }
+
+const styles = StyleSheet.create({
+  item: {
+    borderRadius: 5,
+  }
+})
 
 export default TaskItem

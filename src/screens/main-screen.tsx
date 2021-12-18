@@ -32,7 +32,12 @@ const initialData = [
   }
 ]
 
-export default function MainScreen() {
+interface Props {
+  someday: boolean
+}
+
+export default function MainScreen(props: Props) {
+  const { someday } = props;
   const [data, setData] = useState([])
   const [editingItemId, setIsEditingId] = useState<string | null>(null)
 
@@ -89,7 +94,15 @@ useEffect(async() => {
       const tasksData = keys.map((k, index) => {
         return JSON.parse(todos[index][1])
       })
-      setData(tasksData)
+
+    const categoryTasks = tasksData.filter((task) => {
+      if (someday) {
+        return task.category === 'someday'
+      }
+      return task.category === 'mainTasks'
+    })
+
+    setData(categoryTasks)
     }
 }, [])
 
@@ -140,7 +153,8 @@ useEffect(async() => {
      const newTask = {
        id,
        subject: '',
-       done: false
+       done: false,
+       category: someday ? 'someday' : 'mainTasks',
     }
     setData([
      newTask,
@@ -151,7 +165,7 @@ useEffect(async() => {
   }
 
  return (
-  <AnimatedColorBox bg={useColorModeValue('warmGray.60', '#1f223d')} 
+  <AnimatedColorBox bg={useColorModeValue('warmGray.60', '#141526')} 
     w="full"
    flex={1}>
     <NavBar  />
@@ -162,7 +176,7 @@ useEffect(async() => {
     mt="-20px" 
     borderTopLeftRadius="20px" 
     borderTopRightRadius="20px" 
-    bg={useColorModeValue('warmGray.50', '#1f223d')}
+    bg={useColorModeValue('warmGray.50', '#141526')}
     pt="5px"
     >
       <TaskList 
@@ -179,7 +193,7 @@ useEffect(async() => {
     position="absolute" 
     renderInPortal={false} 
     size="sm" 
-    icon={<Icon size="sm" color="black" as={<AntDesign name="plus" />} />}
+    icon={<Icon size="sm" fontWeight="bold" color="black" as={<AntDesign name="plus" />} />}
     colorScheme={useColorModeValue('blue', 'darkBlue')}
     bg={useColorModeValue('blue.500', '#00fff1')}
     onPress={handleCreateTask}
