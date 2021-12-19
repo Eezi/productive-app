@@ -21,6 +21,7 @@ interface TaskListProps {
   onFinishEditing: (item: TaskItemData) => void
   onPressLabel: (item: TaskItemData) => void
   onRemoveItem: (item: TaskItemData) => void
+  isLaterScreen: boolean
 }
 
 interface TaskItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
@@ -32,6 +33,7 @@ interface TaskItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandle
   onPressLabel: (item: TaskItemData) => void
   onRemoveItem: (item: TaskItemData) => void
   onRemove: (item: TaskItemData) => void
+  isLaterScreen: boolean
 }
 
 export const AnimatedTaskItem = (props: TaskItemProps) => {
@@ -43,7 +45,8 @@ export const AnimatedTaskItem = (props: TaskItemProps) => {
   onFinishEditing,
   onPressLabel,
   onRemove,
-  simultaneousHandlers
+  simultaneousHandlers,
+  isLaterScreen,
   } = props
 
   const handleToggleCheckbox = useCallback(() => {
@@ -90,6 +93,7 @@ export const AnimatedTaskItem = (props: TaskItemProps) => {
         onFinishEditing={handleFinishEditing}
         onPressLabel={handlePressLabel}
         onRemove={handleRemove}
+        isLaterScreen={isLaterScreen}
       /> 
     </StyledView>
   )
@@ -104,8 +108,8 @@ export default function TaskList(props: TaskListProps) {
     onFinishEditing,
     onPressLabel,
     onRemoveItem,
+    isLaterScreen,
   } = props
-
   const refScrollView = useRef(null)
 
   return (
@@ -122,6 +126,7 @@ export default function TaskList(props: TaskListProps) {
         onFinishEditing={onFinishEditing}
         onPressLabel={onPressLabel}
         onRemove={onRemoveItem}
+        isLaterScreen={isLaterScreen}
       />
     ))}
       </AnimatePresence>

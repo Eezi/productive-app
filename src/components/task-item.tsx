@@ -30,6 +30,7 @@ interface Props extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   onChangeSubject: (subject: string) => void
   onFinishEditing?: () => void
   subject: string
+  isLaterScreen: boolean
 }
 
 const TaskItem = (props: Props) => {
@@ -41,6 +42,7 @@ const TaskItem = (props: Props) => {
     onChangeSubject,
     onFinishEditing,
     isEditing,
+    isLaterScreen,
   } = props
   const theme = useTheme()
   const highlightColor = themeTools.getColor(
@@ -69,17 +71,26 @@ const TaskItem = (props: Props) => {
   const handleChangeSubject = useCallback((e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     onChangeSubject && onChangeSubject(e.nativeEvent.text)
   }, [onChangeSubject])
+
+  const screenColor = isLaterScreen ? '#242424' : '#1f223d'
   
   return (
     <SwipableView simultaneousHandlers={simultaneousHandlers}
     onSwipeLeft={onRemove}
     backView={
       <Box 
-      w="full" 
-      h="full" 
+      //w="full" 
+      //h="full" 
+      pl={4}
+      pr={8} 
+      mx={1}
+      py={4} 
+      mb={1}
       alignItems="flex-end" 
+      style={styles.item}
       justifyContent="center" 
-      pr={4}>
+      bg="red.500"
+      >
          <Icon color="white" as={<Feather name="trash-2" />} size="sm" />
       </Box>
     }>
@@ -93,7 +104,7 @@ const TaskItem = (props: Props) => {
       mb={1}
       style={styles.item}
       //bg={useColorModeValue('warmGray.50', '#1f223d')}
-      bg={useColorModeValue('warmGray.50', '#1f223d')}
+      bg={useColorModeValue('#f5f5f5', screenColor)}
       >
     <Box width={30} height={30} mr={3}>
       <Pressable onPress={onToggleCheckbox}>

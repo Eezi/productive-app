@@ -9,7 +9,7 @@ import MainScreen from './main-screen'
 import AnimatedColorBox from '../components/animated-color-box'
 
 const AboutScreen = () => {
-  return <MainScreen someday={true} />
+  return <MainScreen isLaterScreen={true} />
 }
 
 export default AboutScreen

@@ -55,14 +55,14 @@ const Sidebar = (props: DrawerContentComponentProps) => {
    I  onPress={handlePressMenuMain}
       icon="inbox"
    >
-      Today
+      Soon
     </MenuButton>
     <MenuButton 
       active={currentRoute === 'About'} 
    I  onPress={handlePressMenuAbout}
       icon="clock"
    >
-      Someday
+      Later
     </MenuButton>
     </VStack>
     <Center>

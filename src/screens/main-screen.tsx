@@ -8,6 +8,7 @@ import {
   View
 } from 'native-base'
 import AnimatedColorBox from '../components/animated-color-box'
+import Masthead from '../components/masthead'
 import { AntDesign } from '@expo/vector-icons'
 import shortid from 'shortid'
 import TaskList from '../components/task-list'
@@ -33,11 +34,11 @@ const initialData = [
 ]
 
 interface Props {
-  someday: boolean
+  isLaterScreen: boolean
 }
 
 export default function MainScreen(props: Props) {
-  const { someday } = props;
+  const { isLaterScreen } = props;
   const [data, setData] = useState([])
   const [editingItemId, setIsEditingId] = useState<string | null>(null)
 
@@ -96,10 +97,10 @@ useEffect(async() => {
       })
 
     const categoryTasks = tasksData.filter((task) => {
-      if (someday) {
-        return task.category === 'someday'
+      if (isLaterScreen) {
+        return task.category === 'later'
       }
-      return task.category === 'mainTasks'
+      return task.category === 'soon'
     })
 
     setData(categoryTasks)
@@ -154,7 +155,7 @@ useEffect(async() => {
        id,
        subject: '',
        done: false,
-       category: someday ? 'someday' : 'mainTasks',
+       category: isLaterScreen ? 'later' : 'soon',
     }
     setData([
      newTask,
@@ -164,19 +165,19 @@ useEffect(async() => {
     storeData(newTask);
   }
 
+  const screenColor = isLaterScreen ? '#000000' : '#141526'
+
  return (
-  <AnimatedColorBox bg={useColorModeValue('warmGray.60', '#141526')} 
+  <AnimatedColorBox bg={useColorModeValue('#fff', screenColor)} 
     w="full"
    flex={1}>
-    <NavBar  />
-   {/*<Masthead title="What's up, Tomi!" image={require('../assets/tech-img.jpeg')}>
-   </Masthead>*/}
+    <NavBar isLaterScreen={isLaterScreen} />
    <VStack 
     space={1} 
     mt="-20px" 
     borderTopLeftRadius="20px" 
     borderTopRightRadius="20px" 
-    bg={useColorModeValue('warmGray.50', '#141526')}
+    bg={useColorModeValue('#fff', screenColor)}
     pt="5px"
     >
       <TaskList 
@@ -187,6 +188,7 @@ useEffect(async() => {
         onPressLabel={handlePressTaskItemLabel}
         onRemoveItem={handleRemoveItem}
         editingItemId={editingItemId}
+        isLaterScreen={isLaterScreen}
       />
    </VStack>
    <Fab 
