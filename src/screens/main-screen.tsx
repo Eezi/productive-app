@@ -14,6 +14,7 @@ import shortid from 'shortid'
 import TaskList from '../components/task-list'
 import NavBar from '../components/navbar'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 const initialData = [
   {
@@ -29,6 +30,11 @@ const initialData = [
   {
     id: shortid.generate(),
     subject: 'You can navigate in app by pressing the icon form top left corner.',
+    done: false,
+  },
+  {
+    id: shortid.generate(),
+    subject: 'You can move the task to the soon view form later view by pressing icon in the right side of the task',
     done: false,
   }
 ]
@@ -50,7 +56,7 @@ export default function MainScreen(props: Props) {
     console.log('AsyncStorage error [storeData]', e)
   }
 }
-
+const isFocused = useIsFocused()
 
 const getData = async () => {
   let keys = []
@@ -78,18 +84,7 @@ const removeFromStorage = async (id: string) => {
   }
 }
 
-
-const editStorageTask = async (task: any) => {
-  try {
-    const jsonValue = JSON.stringify(task)
-    await AsyncStorage.setItem(task.id, jsonValue)
-  } catch(e) {
-    console.log('AsyncStorage error [editStorageTask]', e)
-  }
-}
-
-useEffect(async() => {
-  const tasks = await getData();
+const validateTasks = (tasks) => {
   const { todos, keys } = tasks;
     if (tasks !== null) {
       const tasksData = keys.map((k, index) => {
@@ -102,10 +97,24 @@ useEffect(async() => {
       }
       return task.category === 'soon'
     })
+    return categoryTasks
+  }
+}
 
-    setData(categoryTasks)
-    }
-}, [])
+const editStorageTask = async (task: any) => {
+  try {
+    const jsonValue = JSON.stringify(task)
+    await AsyncStorage.setItem(task.id, jsonValue)
+  } catch(e) {
+    console.log('AsyncStorage error [editStorageTask]', e)
+  }
+}
+
+useEffect(async() => {
+  const tasks = await getData();
+  const categoryTasks = validateTasks(tasks)
+  setData(categoryTasks)
+}, [isFocused])
 
   const handleToggleTaskItem = useCallback((item) => {
     setData(prevData => {
@@ -118,6 +127,20 @@ useEffect(async() => {
       return newData
     })
     editStorageTask({...item, done: !item.done })
+  }, [])
+
+  const handleChangeTaskCategory = useCallback((item) => {
+    setData(prevData => {
+      let newData = [...prevData]
+      const index = prevData.indexOf(item)
+      newData[index] = {
+        ...item,
+        category: 'soon',
+      }
+      return newData
+    })
+
+    editStorageTask({...item, category: 'soon' })
   }, [])
 
   const handleChangeTaskItemSubject = useCallback((item, newSubject) => {
@@ -189,6 +212,7 @@ useEffect(async() => {
         onRemoveItem={handleRemoveItem}
         editingItemId={editingItemId}
         isLaterScreen={isLaterScreen}
+        onChangeCategory={handleChangeTaskCategory}
       />
    </VStack>
    <Fab 

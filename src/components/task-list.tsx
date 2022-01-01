@@ -11,6 +11,7 @@ interface TaskItemData {
   id: string
   subject: string
   done: boolean
+  category: string
 }
 
 interface TaskListProps {
@@ -22,6 +23,7 @@ interface TaskListProps {
   onPressLabel: (item: TaskItemData) => void
   onRemoveItem: (item: TaskItemData) => void
   isLaterScreen: boolean
+  onChangeCategory: (item: TaskItemData) => void
 }
 
 interface TaskItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
@@ -33,6 +35,7 @@ interface TaskItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandle
   onPressLabel: (item: TaskItemData) => void
   onRemoveItem: (item: TaskItemData) => void
   onRemove: (item: TaskItemData) => void
+  onChangeCategory: (item: TaskItemData) => void
   isLaterScreen: boolean
 }
 
@@ -47,6 +50,7 @@ export const AnimatedTaskItem = (props: TaskItemProps) => {
   onRemove,
   simultaneousHandlers,
   isLaterScreen,
+  onChangeCategory,
   } = props
 
   const handleToggleCheckbox = useCallback(() => {
@@ -68,6 +72,11 @@ export const AnimatedTaskItem = (props: TaskItemProps) => {
   const handleRemove = useCallback(() => {
     onRemove(data)
   }, [data, onRemove])
+
+  const handleChangeCategory = useCallback(() => {
+    onChangeCategory(data)
+    console.log('clickeeed', data)
+  }, [data, onChangeCategory])
 
   return (
     <StyledView w="full" from={{
@@ -94,6 +103,7 @@ export const AnimatedTaskItem = (props: TaskItemProps) => {
         onPressLabel={handlePressLabel}
         onRemove={handleRemove}
         isLaterScreen={isLaterScreen}
+        onChangeCategory={handleChangeCategory}
       /> 
     </StyledView>
   )
@@ -109,13 +119,16 @@ export default function TaskList(props: TaskListProps) {
     onPressLabel,
     onRemoveItem,
     isLaterScreen,
+    onChangeCategory,
   } = props
   const refScrollView = useRef(null)
 
   return (
     <StyledScrollView ref={refScrollView} w="full">
       <AnimatePresence>
-    {data.map(item => (
+    {data.map(item => {
+      if (isLaterScreen && item.category === 'soon') return null
+      return (
       <AnimatedTaskItem 
         key={item.id}
         data={item} 
@@ -127,8 +140,9 @@ export default function TaskList(props: TaskListProps) {
         onPressLabel={onPressLabel}
         onRemove={onRemoveItem}
         isLaterScreen={isLaterScreen}
+        onChangeCategory={onChangeCategory}
       />
-    ))}
+    )})}
       </AnimatePresence>
     <View style={{ height: 250 }} />
     </StyledScrollView>

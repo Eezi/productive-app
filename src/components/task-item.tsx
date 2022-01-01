@@ -19,6 +19,7 @@ import {
 import AnimatedTaskLabel from './animated-task-label'
 import SwipableView from './swipable-view'
 import { Feather } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'; 
 import {PanGestureHandlerProps } from 'react-native-gesture-handler'
 
 interface Props extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
@@ -29,6 +30,7 @@ interface Props extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   onRemove?: () => void
   onChangeSubject: (subject: string) => void
   onFinishEditing?: () => void
+  onChangeCategory: () => void
   subject: string
   isLaterScreen: boolean
 }
@@ -43,6 +45,7 @@ const TaskItem = (props: Props) => {
     onFinishEditing,
     isEditing,
     isLaterScreen,
+    onChangeCategory,
   } = props
   const theme = useTheme()
   const highlightColor = themeTools.getColor(
@@ -79,8 +82,6 @@ const TaskItem = (props: Props) => {
     onSwipeLeft={onRemove}
     backView={
       <Box 
-      //w="full" 
-      //h="full" 
       pl={4}
       pr={8} 
       mx={1}
@@ -91,7 +92,7 @@ const TaskItem = (props: Props) => {
       justifyContent="center" 
       bg="red.500"
       >
-         <Icon color="white" as={<Feather name="trash-2" />} size="sm" />
+         <Icon style={{ color: 'white' }} as={<Feather name="trash-2" />} size="sm" />
       </Box>
     }>
     <HStack 
@@ -131,6 +132,7 @@ const TaskItem = (props: Props) => {
       onBlur={onFinishEditing}
       />
     ) : (
+      <React.Fragment>
     <AnimatedTaskLabel 
       textColor={activeTextColor}
       inactiveTextColor={doneTextColor}
@@ -139,6 +141,12 @@ const TaskItem = (props: Props) => {
     >
     {subject}
   </AnimatedTaskLabel>
+    {isLaterScreen && (
+      <Box width={26} height={30} ml="auto">
+        <MaterialIcons onPress={onChangeCategory} name="move-to-inbox" size={30} color="white" />
+      </Box>
+    )}
+  </React.Fragment>
     )}
     </HStack>
     </SwipableView>

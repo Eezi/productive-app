@@ -82,9 +82,9 @@ const AnimatedTaskLabel = memo((props: Props) => {
         <AnimatedText 
           fontSize={16} 
           noOfLines={6} 
+          mr={5}
           isTruncated 
-          pl={1}
-          pr={4}
+          pr={9}
           style={[textColorAnimatedStyles]}
         >
           {children} 

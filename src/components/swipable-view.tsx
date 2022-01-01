@@ -10,6 +10,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withSpring,
   runOnJS
 } from 'react-native-reanimated'
 import { Box } from 'native-base'
